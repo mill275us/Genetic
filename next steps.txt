@@ -1,0 +1,8 @@
+Next Steps
+
+Create a GitHub Repository for this (Also for the fractal program)
+Add more than one bot
+Add index so each bot can be seen as a letter on the field
+Check if bots are still alive and remove
+Add reproduction / mitosis to the bots
+Add pygame harness to visualize the action
