@@ -1,15 +1,22 @@
 import pygame
 from Utils.bot import Bot
 from Utils.field import Field
+from Utils.botColor import PyBotColorer
 
 # Main Program
 # To define say a 10 x 10 grid
 # Uses a zero base
-grid = 9
-food_density = 50
-food_spawn_per_turn = 2
+grid = 19
+number_of_starting_bots = 5
+food_density = int(.5 * grid ** 2)
+food_spawn_per_turn = int(.05 * grid ** 2)
 field = Field(grid, food_density)
-bots = [Bot(field, (225, 225, 0)), Bot(field, (225, 0, 0)), Bot(field, (0, 0, 255))]
+bots = []
+
+# Create starting field of bots
+botColorer = PyBotColorer(number_of_starting_bots)
+for i in range(number_of_starting_bots):
+    bots.append(Bot(field, botColorer.pyColorForBot()))
 
 # Setup Pygame for display
 screen_size = 500
