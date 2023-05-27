@@ -41,6 +41,13 @@ while running:
             if len(bots) == 0:
                 running = False
 
+        # Check for reproduction
+        if bot.readyToReproduce:
+            energy = int(bot.energy / 2)
+            bot.energy = energy
+            bot.readyToReproduce = False
+            bots.append(Bot(field, bot.color))
+
         # Draw each bug        
         rect = pygame.Rect(bot.x * cell_size , bot.y * cell_size, cell_size, cell_size)
         pygame.draw.rect(window, bot.color, rect, 2)

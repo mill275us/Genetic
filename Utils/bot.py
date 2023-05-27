@@ -7,8 +7,10 @@ class Bot:
         self.grid_size = field.grid_size
         self.energy = 250
         self.energy_decrement = 50
-        self.food_energy = 100
+        self.food_energy = 150
+        self.mitosis_level = 500
         self.isAlive = True
+        self.readyToReproduce = False
         self.color = color
 
         # Create a random probability array
@@ -41,6 +43,8 @@ class Bot:
         if self.field.field[self.x][self.y] == 1:
             self.energy += self.food_energy
             self.field.consumeFoodAt(self.x, self.y)
+            if self.energy >= self.mitosis_level:
+                self.readyToReproduce = True
     
     def printStatus(self):
         print("Moving direction {} into cell ({}, {}) --> Energy = {}".format(self.direction, self.x, self.y, self.energy))
