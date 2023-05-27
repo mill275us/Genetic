@@ -48,7 +48,6 @@ while running:
     for bot in bots:        
         bot.move()
         bot.eat()
-        ###bot.printStatus()     
 
         # Remove dead bots
         if not bot.isAlive:
@@ -78,7 +77,7 @@ while running:
 
     # Display board
     pygame.display.update()
-    clock.tick(2)
+    clock.tick(4)
     cycle_coounter += 1
 
 

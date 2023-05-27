@@ -7,15 +7,7 @@ class Field:
 
         # TAdd 1 to correct for zero base
         self.field = np.zeros((self.grid_size+1, self.grid_size+1), dtype=int)
-        self.addFood(starting_food
-                     )
-        # for i in range (starting_food):
-        #     x = int(round(self.grid_size * float(np.random.rand(1)), 0))
-        #     y = int(round(self.grid_size * float(np.random.rand(1)), 0))
-        #     if self.field[x][y] == 0:
-        #         self.field[x][y] = 1
-        #     else:
-        #         i -= 1
+        self.addFood(starting_food)
 
     def consumeFoodAt(self, x, y):
         self.field[x][y] = 0
