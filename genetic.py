@@ -7,8 +7,9 @@ from Utils.field import Field
 # Uses a zero base
 grid = 9
 food_density = 50
+food_spawn_per_turn = 2
 field = Field(grid, food_density)
-bots = [Bot(field, (225, 225, 0)), Bot(field, (225, 0, 0))]
+bots = [Bot(field, (225, 225, 0)), Bot(field, (225, 0, 0)), Bot(field, (0, 0, 255))]
 
 # Setup Pygame for display
 screen_size = 500
@@ -24,16 +25,23 @@ pygame.display.update()
 
 # Simulate several evolutions of the field
 running = True
+cycle_coounter = 1
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    # Clear the screen`
     window.fill((0, 0, 0))
+    print("Cycle {} ---> Number of bugs: {}".format(cycle_coounter, len(bots)))
+
+    # Add new food
+    field.addFood(food_spawn_per_turn)
+
     for bot in bots:        
         bot.move()
         bot.eat()
-        bot.printStatus()     
+        ###bot.printStatus()     
 
         # Remove dead bots
         if not bot.isAlive:
@@ -46,14 +54,14 @@ while running:
             energy = int(bot.energy / 2)
             bot.energy = energy
             bot.readyToReproduce = False
-            bots.append(Bot(field, bot.color))
-
+            new_bot = bot
+            bots.append(new_bot)
+        
         # Draw each bug        
         rect = pygame.Rect(bot.x * cell_size , bot.y * cell_size, cell_size, cell_size)
         pygame.draw.rect(window, bot.color, rect, 2)
 
-
-    # Add food to display
+    # Disply Food on field
     for x in range(0, cell_count):
         for y in range(0, cell_count):
             if field.field[x][y] == 1:
@@ -61,10 +69,9 @@ while running:
                 ypos = int(y * cell_size+ cell_cntr_offset) 
                 pygame.draw.circle(window, (0, 255, 0), [xpos, ypos], 8, 0)
 
+    # Display board
     pygame.display.update()
     clock.tick(2)
+    cycle_coounter += 1
 
-    #field.printStatus()
-
-    pass
 
