@@ -16,6 +16,9 @@ class Field:
             else:
                 i -= 1
 
+    def consumeFoodAt(self, x, y):
+        self.field[x][y] = 0
+
     def printStatus(self):
         rows, cols = self.field.shape
         for row in range(rows):

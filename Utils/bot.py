@@ -1,14 +1,15 @@
 import numpy as np
 
 class Bot:
-    def __init__(self, field: object) -> None:
+    def __init__(self, field: object, color) -> None:
         # Grid size is zero indexed square field
         self.field = field
         self.grid_size = field.grid_size
         self.energy = 250
         self.energy_decrement = 50
-        self.food_energy = 300
+        self.food_energy = 100
         self.isAlive = True
+        self.color = color
 
         # Create a random probability array
         # For movement
@@ -39,7 +40,7 @@ class Bot:
     def eat(self):
         if self.field.field[self.x][self.y] == 1:
             self.energy += self.food_energy
-        self.field.field[self.x][self.y] = 9
+            self.field.consumeFoodAt(self.x, self.y)
     
     def printStatus(self):
         print("Moving direction {} into cell ({}, {}) --> Energy = {}".format(self.direction, self.x, self.y, self.energy))
