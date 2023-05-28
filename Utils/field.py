@@ -14,8 +14,8 @@ class Field:
 
     def addFood(self, amount_to_add):
         for i in range (amount_to_add):
-            x = int(round(self.grid_size * float(np.random.rand(1)), 0))
-            y = int(round(self.grid_size * float(np.random.rand(1)), 0))
+            x = np.random.randint(self.grid_size + 1)
+            y = np.random.randint(self.grid_size + 1)
             if self.field[x][y] == 0:
                 self.field[x][y] = 1
             else:

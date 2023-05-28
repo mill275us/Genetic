@@ -17,26 +17,19 @@ class Bot:
         # Create a random probability array
         # For movement
         a = np.random.rand(1, 8)
-        self.probability_array  = a / a.sum()
+        a1 = a / a.sum()
+        self.probability_array = a1.tolist()[0]
 
         # Create a random starting location
-        self.x = int(round(self.grid_size * float(np.random.rand(1)), 0))
-        self.y = int(round(self.grid_size * float(np.random.rand(1)), 0))
+        self.x = np.random.randint(self.grid_size + 1)
+        self.y = np.random.randint(self.grid_size + 1)
         self.direction = 0
         self.field.field[self.x][self.y] = 9
 
     def move(self):
         self.field.field[self.x][self.y] = 0
-
-        #### Note this is just moving in a random direction!
-        ### It is not using the probability that I created above
-        self.direction = int(round(7 * float(np.random.rand(1)), 0))
+        self.direction = int(np.random.choice(np.arange(8), 1, p = self.probability_array))
         offset = self.xy_offset()
-        
-        ### Ok to remove this
-        if self.direction == 7:
-            print("7", offset)
-
         self.x = (self.x + offset[0]) % (self.grid_size + 1)
         self.y = (self.y +  offset[1]) % (self.grid_size + 1)
         self.energy -= self.energy_decrement
