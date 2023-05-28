@@ -1,0 +1,1 @@
+Looks like at cycle 7 when bug 1 reproduces it is dropped from the bot list and replaced with 2 references to bug 4 - bug 4 then moves twice in cycle 8
