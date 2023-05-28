@@ -46,7 +46,6 @@ class Bot:
     def eat(self):
         if self.field.field[self.x][self.y] == 1:
             self.energy += self.food_energy
-            ###print("  -- Bug {} is eating at {}, {}".format(self.id, self.x, self.y))
             msg = "  -- Bug {} is eating at ({}, {})".format(self.id, self.x, self.y)
             self.field.consumeFoodAt(self.x, self.y, msg)
             if self.energy >= self.mitosis_level:

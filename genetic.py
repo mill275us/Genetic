@@ -3,14 +3,7 @@ import copy
 from Utils.bot import Bot
 from Utils.field import Field
 from Utils.botColor import PyBotColorer
-
-class BotTracker:
-    def __init__(self) -> None:
-        self.next_id = 0
-
-    def getId(self):
-        self.next_id += 1
-        return self.next_id
+from Utils.botIndexing import BotTracker
 
 # Main Program
 # To define say a 10 x 10 grid
