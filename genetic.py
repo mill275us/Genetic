@@ -6,12 +6,17 @@ from Utils.botColor import PyBotColorer
 from Utils.botIndexing import BotTracker
 
 # Main Program
-# To define say a 10 x 10 grid
-# Uses a zero base
-grid = 19
+
+
+# USER DEFINED
+grid = 19   # To define say a 10 x 10 grid uses a zero base so use 9
 number_of_starting_bots = 3
-food_density = int(.5 * grid ** 2)
-food_spawn_per_turn = int(.05 * grid ** 2)
+starting_food_pct = .5
+percent_new_food_per_turn = .05
+
+# Initial vars setup based on above user input
+food_density = int(starting_food_pct * grid ** 2)
+food_spawn_per_turn = int(percent_new_food_per_turn * grid ** 2)
 field = Field(grid, food_density)
 bots = []
 
@@ -29,7 +34,6 @@ screen_size = 500
 cell_size = int(screen_size / (grid + 1))
 cell_count = int(screen_size / cell_size)
 cell_cntr_offset = int(cell_size / 2)
-
 pygame.init()
 clock = pygame.time.Clock()
 window = pygame.display.set_mode([screen_size, screen_size])
