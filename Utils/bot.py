@@ -15,6 +15,7 @@ class Bot:
         self.color = color
         self.id = -1
         self.parent_id = -1
+        self.age = 0
 
         # Create a random probability array for movement
         a = np.random.rand(1, 8)
@@ -27,6 +28,7 @@ class Bot:
         self.direction = 0
 
     def move(self):
+        self.age += 1
         from_x = self.x
         from_y = self.y
         self.direction = int(np.random.choice(np.arange(8), 1, p = self.probability_array))

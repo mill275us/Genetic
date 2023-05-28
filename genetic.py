@@ -1,18 +1,19 @@
 import pygame
 import copy
+from operator import attrgetter
 from Utils.bot import Bot
 from Utils.field import Field
 from Utils.botColor import PyBotColorer
 from Utils.botIndexing import BotTracker
+from PygameUtils.statusDisplay import StatusDisplay
 
 # Main Program
-
-
 # USER DEFINED
 grid = 19   # To define say a 10 x 10 grid uses a zero base so use 9
 number_of_starting_bots = 3
 starting_food_pct = .5
 percent_new_food_per_turn = .05
+frames_per_second = 3
 
 # Initial vars setup based on above user input
 food_density = int(starting_food_pct * grid ** 2)
@@ -36,8 +37,12 @@ cell_count = int(screen_size / cell_size)
 cell_cntr_offset = int(cell_size / 2)
 pygame.init()
 clock = pygame.time.Clock()
-window = pygame.display.set_mode([screen_size, screen_size])
+window = pygame.display.set_mode([screen_size + 200, screen_size])
 window.fill((0, 0, 0))
+
+# Create a status block
+statusBlock = StatusDisplay(window, screen_size + 10, 50)
+
 pygame.display.update()
 
 # Simulate several evolutions of the field
@@ -76,6 +81,7 @@ while running:
             new_bot.id = botTracker.getId()
             new_bot.parent_id = bot.id
             new_bot.field = field
+            new_bot.age = 0
             print("  -- Spawn of {} is Bug {}".format(bot.id, new_bot.id))
             new_bot.mutate()
             bots.append(new_bot)        
@@ -93,9 +99,14 @@ while running:
                 pygame.draw.circle(window, (0, 255, 0), [xpos, ypos], 8, 0)
 
     # Display board
+    oldest_bug = max(bots, key = attrgetter("age"))
+    statusBlock.ypos = 50
+    statusBlock.updateStatus((0,0,255), "Current Cycle", str(cycle_coounter))
+    statusBlock.updateStatus((0,0,255), "Bug Count", str(len(bots)))
+    statusBlock.updateStatus((0,0,255), "Oldest Bug", "Bug {} at Age {}".format(oldest_bug.id, oldest_bug.age))
     pygame.display.update()
     print("-> Food at end of turn {}\n".format(field.field.sum()))
-    clock.tick(10)
+    clock.tick(frames_per_second)
     cycle_coounter += 1
 
 
