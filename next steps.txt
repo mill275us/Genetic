@@ -1,8 +1,5 @@
 Next Steps
 
-Create a GitHub Repository for this (Also for the fractal program)
-Add more than one bot
-Add index so each bot can be seen as a letter on the field
-Check if bots are still alive and remove
-Add reproduction / mitosis to the bots
-Add pygame harness to visualize the action
+Add a status display so you can see how many bugs
+Restore different colors for different bug
+Test if adding too much food still locks things up

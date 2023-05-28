@@ -91,7 +91,7 @@ while running:
     # Display board
     pygame.display.update()
     print("-> Food at end of turn {}\n".format(field.field.sum()))
-    clock.tick(1)
+    clock.tick(10)
     cycle_coounter += 1
 
 

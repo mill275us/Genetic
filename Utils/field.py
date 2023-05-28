@@ -4,6 +4,7 @@ class Field:
     def __init__(self, grid_size: int, starting_food: int) -> None:
         self.grid_size = grid_size 
         self.food = starting_food
+        self.cell_count = (grid_size + 1) ** 2
 
         # TAdd 1 to correct for zero base
         self.field = np.zeros((self.grid_size+1, self.grid_size+1), dtype=int)
@@ -14,6 +15,8 @@ class Field:
         print(message + "     >> Food at {}, {} eaten".format(x, y))
 
     def addFood(self, amount_to_add):
+        if (self.field.sum() + amount_to_add) > self.cell_count:
+            amount_to_add = 0
         i = 0
         while i < amount_to_add:
             x = np.random.randint(self.grid_size + 1)
