@@ -1,1 +1,3 @@
 Looks like at cycle 7 when bug 1 reproduces it is dropped from the bot list and replaced with 2 references to bug 4 - bug 4 then moves twice in cycle 8
+
+In cycle 10 - bug 4 then splits and a new 5 shows up twice

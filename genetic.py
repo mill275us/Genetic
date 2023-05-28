@@ -18,7 +18,7 @@ class BotTracker:
 grid = 19
 number_of_starting_bots = 3
 food_density = int(.5 * grid ** 2)
-food_spawn_per_turn = int(.10 * grid ** 2)
+food_spawn_per_turn = int(.05 * grid ** 2)
 field = Field(grid, food_density)
 bots = []
 
@@ -45,6 +45,7 @@ pygame.display.update()
 
 # Simulate several evolutions of the field
 running = True
+verbose = False
 cycle_coounter = 1
 while running:
     for event in pygame.event.get():
@@ -56,7 +57,10 @@ while running:
     print("Cycle {} ---> Number of bugs: {}".format(cycle_coounter, len(bots)))
 
     # Add new food
+    print("  Food at start is {}".format(field.field.sum()))
+    print("  Food at to add is {}".format(food_spawn_per_turn))
     field.addFood(food_spawn_per_turn)
+    print("  Food at after adding {}".format(field.field.sum()))
 
     for bot in bots:        
         bot.move()
@@ -69,8 +73,9 @@ while running:
                 running = False
 
         # Check for reproduction
-        if bot.readyToReproduce:         
-            print("-- Bug {} is reproducing".format(bot.id))
+        if bot.readyToReproduce:    
+            if verbose:     
+                print("-- Bug {} is reproducing".format(bot.id))
             energy = int(bot.energy / 2)
             bot.energy = energy
             bot.readyToReproduce = False
@@ -78,7 +83,9 @@ while running:
             new_bot = copy.deepcopy(bot)
             new_bot.id = botTracker.getId()
             new_bot.parent_id = bot.id
-            print("-- Spawn of {} is Bug {}".format(bot.id, new_bot.id))
+            new_bot.field = field
+            if verbose:   
+                print("-- Spawn of {} is Bug {}".format(bot.id, new_bot.id))
             new_bot.mutate()
             bots.append(new_bot)        
         
@@ -91,11 +98,12 @@ while running:
         for y in range(0, cell_count):
             if field.field[x][y] == 1:
                 xpos = int(x * cell_size + cell_cntr_offset) 
-                ypos = int(y * cell_size+ cell_cntr_offset) 
+                ypos = int(y * cell_size + cell_cntr_offset) 
                 pygame.draw.circle(window, (0, 255, 0), [xpos, ypos], 8, 0)
 
     # Display board
     pygame.display.update()
+    print("  Food at end of turn {}".format(field.field.sum()))
     clock.tick(1)
     cycle_coounter += 1
 

@@ -1,7 +1,7 @@
 import numpy as np
 
 class Bot:
-    def __init__(self, field: object, color) -> None:
+    def __init__(self, field: object, color, verbose=False) -> None:
         # Grid size is zero indexed square field
         self.field = field
         self.grid_size = field.grid_size
@@ -15,6 +15,7 @@ class Bot:
         self.color = color
         self.id = -1
         self.parent_id = -1
+        self.verbose = verbose
 
         # Create a random probability array
         # For movement
@@ -26,18 +27,18 @@ class Bot:
         self.x = np.random.randint(self.grid_size + 1)
         self.y = np.random.randint(self.grid_size + 1)
         self.direction = 0
-        self.field.field[self.x][self.y] = 9
 
     def move(self):
         from_x = self.x
         from_y = self.y
-        self.field.field[self.x][self.y] = 0
         self.direction = int(np.random.choice(np.arange(8), 1, p = self.probability_array))
         offset = self.xy_offset()
         self.x = (self.x + offset[0]) % (self.grid_size + 1)
         self.y = (self.y +  offset[1]) % (self.grid_size + 1)
         self.energy -= self.energy_decrement
-        print("{} Moving from ({}, {}) to ({}, {}) with Energy Remain={}".format(self.id, from_x, from_y, self.x, self.y, self.energy))
+
+        if self.verbose:
+            print("{} Moving from ({}, {}) to ({}, {}) with Energy Remain={}".format(self.id, from_x, from_y, self.x, self.y, self.energy))
               
         if self.energy < 0:
             self.isAlive = False
@@ -49,13 +50,15 @@ class Bot:
     def eat(self):
         if self.field.field[self.x][self.y] == 1:
             self.energy += self.food_energy
+            print("-- Bug {} is eating at {}, {}".format(self.id, self.x, self.y))
             self.field.consumeFoodAt(self.x, self.y)
             if self.energy >= self.mitosis_level:
                 self.readyToReproduce = True
 
     def mutate(self):
         # Create new random weight shifts
-        print("---- Bug {} is mutating".format(self.id))
+        if self.verbose:
+            print("---- Bug {} is mutating".format(self.id))
         nw = [(np.random.rand(1) - 0.5) * self.mutation_level for i in range(8)]
         curr_p = np.array(self.probability_array)
         new_weights = np.array(nw).flatten()
@@ -64,5 +67,3 @@ class Bot:
         a1 = a / a.sum()
         self.probability_array = a1.tolist()
     
-    def printStatus(self):
-        print("{} Moving direction {} into cell ({}, {}) --> Energy = {}".format(self.id, self.direction, self.x, self.y, self.energy))
