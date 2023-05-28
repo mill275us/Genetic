@@ -45,7 +45,6 @@ pygame.display.update()
 
 # Simulate several evolutions of the field
 running = True
-verbose = False
 cycle_coounter = 1
 while running:
     for event in pygame.event.get():
@@ -57,10 +56,7 @@ while running:
     print("Cycle {} ---> Number of bugs: {}".format(cycle_coounter, len(bots)))
 
     # Add new food
-    print("  Food at start is {}".format(field.field.sum()))
-    print("  Food at to add is {}".format(food_spawn_per_turn))
     field.addFood(food_spawn_per_turn)
-    print("  Food at after adding {}".format(field.field.sum()))
 
     for bot in bots:        
         bot.move()
@@ -74,8 +70,7 @@ while running:
 
         # Check for reproduction
         if bot.readyToReproduce:    
-            if verbose:     
-                print("-- Bug {} is reproducing".format(bot.id))
+            print("  -- Bug {} is reproducing".format(bot.id))
             energy = int(bot.energy / 2)
             bot.energy = energy
             bot.readyToReproduce = False
@@ -84,8 +79,7 @@ while running:
             new_bot.id = botTracker.getId()
             new_bot.parent_id = bot.id
             new_bot.field = field
-            if verbose:   
-                print("-- Spawn of {} is Bug {}".format(bot.id, new_bot.id))
+            print("  -- Spawn of {} is Bug {}".format(bot.id, new_bot.id))
             new_bot.mutate()
             bots.append(new_bot)        
         
@@ -103,7 +97,7 @@ while running:
 
     # Display board
     pygame.display.update()
-    print("  Food at end of turn {}".format(field.field.sum()))
+    print("-> Food at end of turn {}\n".format(field.field.sum()))
     clock.tick(1)
     cycle_coounter += 1
 

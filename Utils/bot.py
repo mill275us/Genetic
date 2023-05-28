@@ -1,7 +1,7 @@
 import numpy as np
 
 class Bot:
-    def __init__(self, field: object, color, verbose=False) -> None:
+    def __init__(self, field: object, color) -> None:
         # Grid size is zero indexed square field
         self.field = field
         self.grid_size = field.grid_size
@@ -15,10 +15,8 @@ class Bot:
         self.color = color
         self.id = -1
         self.parent_id = -1
-        self.verbose = verbose
 
-        # Create a random probability array
-        # For movement
+        # Create a random probability array for movement
         a = np.random.rand(1, 8)
         a1 = a / a.sum()
         self.probability_array = a1.tolist()[0]
@@ -36,9 +34,7 @@ class Bot:
         self.x = (self.x + offset[0]) % (self.grid_size + 1)
         self.y = (self.y +  offset[1]) % (self.grid_size + 1)
         self.energy -= self.energy_decrement
-
-        if self.verbose:
-            print("{} Moving from ({}, {}) to ({}, {}) with Energy Remain={}".format(self.id, from_x, from_y, self.x, self.y, self.energy))
+        print("  {} Moving from ({}, {}) to ({}, {}) with Energy Remain={}".format(self.id, from_x, from_y, self.x, self.y, self.energy))
               
         if self.energy < 0:
             self.isAlive = False
@@ -50,15 +46,15 @@ class Bot:
     def eat(self):
         if self.field.field[self.x][self.y] == 1:
             self.energy += self.food_energy
-            print("-- Bug {} is eating at {}, {}".format(self.id, self.x, self.y))
-            self.field.consumeFoodAt(self.x, self.y)
+            ###print("  -- Bug {} is eating at {}, {}".format(self.id, self.x, self.y))
+            msg = "  -- Bug {} is eating at ({}, {})".format(self.id, self.x, self.y)
+            self.field.consumeFoodAt(self.x, self.y, msg)
             if self.energy >= self.mitosis_level:
                 self.readyToReproduce = True
 
     def mutate(self):
         # Create new random weight shifts
-        if self.verbose:
-            print("---- Bug {} is mutating".format(self.id))
+        print("  ---- Bug {} is mutating".format(self.id))
         nw = [(np.random.rand(1) - 0.5) * self.mutation_level for i in range(8)]
         curr_p = np.array(self.probability_array)
         new_weights = np.array(nw).flatten()
