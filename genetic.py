@@ -13,7 +13,7 @@ grid = 19   # To define say a 10 x 10 grid uses a zero base so use 9
 number_of_starting_bots = 3
 starting_food_pct = .5
 percent_new_food_per_turn = .05
-frames_per_second = 3
+frames_per_second = 30
 
 # Initial vars setup based on above user input
 food_density = int(starting_food_pct * grid ** 2)
@@ -35,19 +35,26 @@ screen_size = 500
 cell_size = int(screen_size / (grid + 1))
 cell_count = int(screen_size / cell_size)
 cell_cntr_offset = int(cell_size / 2)
+if frames_per_second > 1:
+    display_modulus = int(frames_per_second / 2)
+else:
+    display_modulus = 1
 pygame.init()
 clock = pygame.time.Clock()
+cycle_coounter = 1
 window = pygame.display.set_mode([screen_size + 200, screen_size])
 window.fill((0, 0, 0))
 
-# Create a status block
+# Create a status block including strings for displayyt66gty5ggggggggggggggggggggggggggggggg
 statusBlock = StatusDisplay(window, screen_size + 10, 50)
+disp_cycle_counter = str(cycle_coounter)
+disp_num_of_bots = str(number_of_starting_bots)
+disp_oldest_bug = str(cycle_coounter)
 
 pygame.display.update()
 
 # Simulate several evolutions of the field
 running = True
-cycle_coounter = 1
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -98,12 +105,16 @@ while running:
                 ypos = int(y * cell_size + cell_cntr_offset) 
                 pygame.draw.circle(window, (0, 255, 0), [xpos, ypos], 8, 0)
 
-    # Display board
-    oldest_bug = max(bots, key = attrgetter("age"))
+    # Display board - limit updates so there are visible at high FPS
+    if (cycle_coounter % display_modulus) == 0:
+        oldest_bug = max(bots, key = attrgetter("age"))
+        disp_cycle_counter = str(cycle_coounter)
+        disp_num_of_bots = str(len(bots))
+        disp_oldest_bug = "Bug {} at Age {}".format(oldest_bug.id, oldest_bug.age)
     statusBlock.ypos = 50
-    statusBlock.updateStatus((0,0,255), "Current Cycle", str(cycle_coounter))
-    statusBlock.updateStatus((0,0,255), "Bug Count", str(len(bots)))
-    statusBlock.updateStatus((0,0,255), "Oldest Bug", "Bug {} at Age {}".format(oldest_bug.id, oldest_bug.age))
+    statusBlock.updateStatus((0,0,255), "Current Cycle", disp_cycle_counter)
+    statusBlock.updateStatus((0,0,255), "Bug Count", disp_num_of_bots)
+    statusBlock.updateStatus((0,0,255), "Oldest Bug", disp_oldest_bug)
     pygame.display.update()
     print("-> Food at end of turn {}\n".format(field.field.sum()))
     clock.tick(frames_per_second)
