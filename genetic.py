@@ -1,6 +1,7 @@
 import pygame
 import copy
 from operator import attrgetter
+from math import ceil
 from Utils.bot import Bot
 from Utils.field import Field
 from Utils.botColor import PyBotColorer
@@ -9,8 +10,8 @@ from PygameUtils.statusDisplay import StatusDisplay
 
 # Main Program
 # USER DEFINED
-grid = 19   # To define say a 10 x 10 grid uses a zero base so use 9
-number_of_starting_bots = 3
+grid = 49   # To define say a 10 x 10 grid uses a zero base so use 9
+number_of_starting_bots = 13
 starting_food_pct = .5
 percent_new_food_per_turn = .05
 frames_per_second = 30
@@ -33,12 +34,11 @@ for i in range(number_of_starting_bots):
 # Setup Pygame for display
 screen_size = 500
 cell_size = int(screen_size / (grid + 1))
+food_size = ceil((screen_size / (grid + 1)) / 2)
 cell_count = int(screen_size / cell_size)
 cell_cntr_offset = int(cell_size / 2)
-if frames_per_second > 1:
-    display_modulus = int(frames_per_second / 2)
-else:
-    display_modulus = 1
+display_modulus = ceil(frames_per_second / 2)
+
 pygame.init()
 clock = pygame.time.Clock()
 cycle_coounter = 1
@@ -103,7 +103,7 @@ while running:
             if field.field[x][y] == 1:
                 xpos = int(x * cell_size + cell_cntr_offset) 
                 ypos = int(y * cell_size + cell_cntr_offset) 
-                pygame.draw.circle(window, (0, 255, 0), [xpos, ypos], 8, 0)
+                pygame.draw.circle(window, (0, 255, 0), [xpos, ypos], food_size, 0)
 
     # Display board - limit updates so there are visible at high FPS
     if (cycle_coounter % display_modulus) == 0:
